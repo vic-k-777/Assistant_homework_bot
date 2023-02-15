@@ -40,7 +40,8 @@ logging.debug('Бот запущен в работу.')
 
 
 def check_tokens():
-    """Проверяем доступность переменных окружения"""
+    """Проверяем доступность переменных окружения.
+    """
     if all([
             PRACTICUM_TOKEN,
             TELEGRAM_TOKEN,
@@ -50,7 +51,8 @@ def check_tokens():
 
 
 def send_message(bot, message):
-    """Отправляем сообщение в чат пользователя в Telegram"""
+    """Отправляем сообщение в чат пользователя в Telegram
+    """
     try:
         logging.debug(f'Сообщение успешно отправлено в чат'
                       f'{TELEGRAM_CHAT_ID}: {message}')
@@ -63,7 +65,8 @@ def send_message(bot, message):
 def get_api_answer(timestamp):
     """делаем запрос к API."""
     """В случае успешного запроса должна вернуть ответ API,"""
-    """приведя его из формата JSON к типам данных Python."""
+    """приведя его из формата JSON к типам данных Python.
+    """
     current_timestamp = int(time.time())
     timestamp = current_timestamp or int(time.time())
     params = {'from_date': timestamp}
@@ -89,7 +92,8 @@ def get_api_answer(timestamp):
 def check_response(response):
     """Проверяем ответ API на соответствие документации"""
     """В качестве параметра функция получает ответ API,"""
-    """приведенный к типам данных Python"""
+    """приведенный к типам данных Python
+    """
     if type(response) is not dict:
         logger.error('Ответ API не является словарем.')
         raise TypeError
@@ -108,7 +112,8 @@ def parse_status(homework):
     """извлекаем из инфо о конкретой ДР статус работы."""
     """В качестве параметра функция получает 1 элемент из списка ДР."""
     """В случае успеха, функция возвращает строку,"""
-    """содержащую один из вердиктов словаря HOMEWORK_VERDICTS"""
+    """содержащую один из вердиктов словаря HOMEWORK_VERDICTS.
+    """
     if 'homework_name' not in homework:
         raise KeyError('Отсутствует ключ "homework_name" в ответе API')
     if 'status' not in homework:
@@ -122,7 +127,8 @@ def parse_status(homework):
 
 
 def main():
-    """Основная логика работы бота."""
+    """Основная логика работы бота.
+    """
     if not check_tokens():
         logger.critical('Отсутствует переменная окружения')
         sys.exit()
