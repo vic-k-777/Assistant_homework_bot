@@ -5,7 +5,6 @@ import os
 import time
 import sys
 from http import HTTPStatus
-from logging import Formatter
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -25,17 +24,6 @@ HOMEWORK_VERDICTS = {
     'rejected': 'Работа проверена: у ревьюера есть замечания.'
 }
 
-logging.basicConfig(
-    level=logging.DEBUG,
-    filename='bot.log',
-    format='%(asctime)s,%(levelname)s, %(message)s'
-)
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-handler = logging.StreamHandler(sys.stdout)
-handler.setFormatter(Formatter(fmt='[%(asctime)s: %(levelname)s] %(message)s'))
-logger.addHandler(handler)
-
 logging.debug('Бот запущен в работу.')
 
 
@@ -48,12 +36,13 @@ def check_tokens():
 
 def send_message(bot, message):
     """Отправляем сообщение в чат пользователя в Telegram."""
+    logging.info('Пробуем отправить сообщение в Telegram.')
     try:
-        logging.debug('Пробуем отправить сообщение в Telegram.')
         bot.send_message(TELEGRAM_CHAT_ID, message)
         logging.debug('Сообщение в Telegram успешно отправлено.')
     except Exception:
         logging.error('Не удалось отправить сообщение в Telegram.')
+        raise Exception
 
 
 def get_api_answer(timestamp):
@@ -79,7 +68,7 @@ def get_api_answer(timestamp):
     try:
         return homework_statuses.json()
     except ValueError:
-        logger.error('Ошибка парсинга ответа из формата json')
+        logging.error('Ошибка парсинга ответа из формата json')
         raise ValueError
 
 
@@ -134,17 +123,20 @@ def main():
             response = get_api_answer(current_timestamp)
             homeworks = check_response(response)
             if homeworks != previous_homeworks:
-                for hw in homeworks:
-                    message = parse_status(hw)
+                for homework in homeworks:
+                    message = parse_status(homework)
                     send_message(bot, message)
                     previous_homeworks = homeworks.copy()
                     current_timestamp = int(time.time())
             else:
                 logging.debug('Нет новых статусов')
                 current_timestamp = response.get('current_date')
+        except telegram.TelegramError:
+            logging.error('Сообщение не было отправлено')
+            raise ('Сообщение не было отправлено')
         except Exception as error:
             message = f'Сбой в работе программы: {error}'
-            logger.error(message)
+            logging.error(message)
             if message != previous_message:
                 send_message(bot, message)
                 previous_message = message
@@ -153,4 +145,16 @@ def main():
 
 
 if __name__ == '__main__':
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format='%(asctime)s,%(levelname)s, %(message)s',
+        handler=[
+            logging.FileHandler(
+                'bot.log',
+                encoding='utf--8',
+                mode='w',
+            ),
+            logging.StreamHandler()
+        ]
+    )
     main()
