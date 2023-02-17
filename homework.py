@@ -41,12 +41,11 @@ logging.debug('Бот запущен в работу.')
 
 def check_tokens():
     """Проверяем доступность переменных окружения."""
-    if all([
+    return all([
             PRACTICUM_TOKEN,
             TELEGRAM_TOKEN,
             TELEGRAM_CHAT_ID,
-    ]):
-        return all
+    ])
 
 
 def send_message(bot, message):
@@ -94,7 +93,7 @@ def check_response(response):
     if type(response) is not dict:
         logging.error('Ответ API не является словарем.')
         raise TypeError('Ответ API не является словарем.')
-    if ('current_date' in response) and ('homeworks' in response):
+    if 'current_date' in response and 'homeworks' in response:
         if type(response.get('homeworks')) is not list:
             logging.error('Ответ API не соответствует.')
             raise TypeError
