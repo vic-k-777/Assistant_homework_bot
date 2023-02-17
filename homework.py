@@ -42,9 +42,9 @@ logging.debug('Бот запущен в работу.')
 def check_tokens():
     """Проверяем доступность переменных окружения."""
     return all([
-            PRACTICUM_TOKEN,
-            TELEGRAM_TOKEN,
-            TELEGRAM_CHAT_ID,
+                PRACTICUM_TOKEN,
+                TELEGRAM_TOKEN,
+                TELEGRAM_CHAT_ID,
     ])
 
 
