@@ -40,5 +40,5 @@ pip install -r requirements.txt
 
 python homework.py
 
-6. Бот проинформирует Вас о статусе домашнего задания сообщением в Telegram
+6. Бот проинформирует Вас о статусе домашнего задания сообщением в Telegram:
 ![Alt text](image.png)
