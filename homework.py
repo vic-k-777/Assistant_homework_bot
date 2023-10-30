@@ -24,7 +24,14 @@ HOMEWORK_VERDICTS = {
     'rejected': 'Работа проверена: у ревьюера есть замечания.'
 }
 
-logging.debug('Бот запущен в работу.')
+handler = [
+            logging.FileHandler(
+                'bot.log',
+                encoding='utf--8',
+                mode='w',
+            ),
+            logging.StreamHandler()
+]
 
 
 def check_tokens():
@@ -111,6 +118,8 @@ def parse_status(homework):
 
 def main():
     """Основная логика работы бота."""
+
+    logging.debug('Бот запущен в работу.')
     if not check_tokens():
         logging.critical('Отсутствует переменная окружения')
         sys.exit('Выход из системы. Проверьте переменные окружения.')
@@ -148,13 +157,5 @@ if __name__ == '__main__':
     logging.basicConfig(
         level=logging.DEBUG,
         format='%(asctime)s,%(levelname)s, %(message)s',
-        handler=[
-            logging.FileHandler(
-                'bot.log',
-                encoding='utf--8',
-                mode='w',
-            ),
-            logging.StreamHandler()
-        ]
     )
     main()
