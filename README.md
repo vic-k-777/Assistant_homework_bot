@@ -18,7 +18,7 @@ Python, Python-Telegram-bot, Yandex Practicum API
 
 1. Перейдите по указанной ниже ссылке и клонируйте проект:
 
-https://github.com/vic-k-777/homework_bot.git
+https://github.com/vic-k-777/Assistant_homework_bot.git
 
 2. Установите виртуальное окружение командой:
 
